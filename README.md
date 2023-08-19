@@ -243,7 +243,7 @@ This is in order to allow the `session` object to be tied to a client-side cooki
     @router.post("/logout")
     async def logout(session: dict = Depends(get_session)):
         """
-        Logs the user out by clearing the stored access and refresh tokens in the session.
+        Logs the user out by clearing the stored tokens in the session.
     
         :param session: The session dictionary associated with the request.
         :type session: dict
@@ -252,7 +252,6 @@ This is in order to allow the `session` object to be tied to a client-side cooki
         :rtype: dict
         """
         session.pop("access_token", None)
-        session.pop("refresh_token", None)
     
         return {"message": "Successfully logged out"}
     
@@ -404,7 +403,7 @@ This is in order to allow the `session` object to be tied to a client-side cooki
         :param api_client: A TestClient instance used to send HTTP requests to the FastAPI application.
         :type api_client: TestClient
     
-        :return: Cookies containing the session data, including access and refresh tokens.
+        :return: Cookies containing the session data, including tokens.
         :rtype: dict
         """
         with patch('requests.post', mock_post):
@@ -416,7 +415,7 @@ This is in order to allow the `session` object to be tied to a client-side cooki
     
     def test_logout(api_client):
         """
-        Tests the logout endpoint to ensure it clears the access and refresh tokens from the session.
+        Tests the logout endpoint to ensure it clears the tokens from the session.
     
         This test includes checks for:
         - Successful logout
@@ -436,7 +435,6 @@ This is in order to allow the `session` object to be tied to a client-side cooki
     
         # Verify that the session tokens have been cleared
         assert "access_token" not in response.cookies.get("session", {})
-        assert "refresh_token" not in response.cookies.get("session", {})
     ```
 
 You can check the API documentation in `localhost:8000/docs`
